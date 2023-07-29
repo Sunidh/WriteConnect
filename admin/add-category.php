@@ -10,12 +10,18 @@ include 'partials/header.php';
         <div class="alert__message error">
             <p>This is an error message</p>
         </div>
-        <form action="" enctype="multipart/form-data">
-            <input type="text" placeholder="Title">
+        <form action="<?= ROOT_URL ?>admin/add-category-logic.php" method="POST">
+            <input type="text" 
+            name="title"
+            placeholder="Title">
            
-          <textarea  rows="4" placeholder="Description"></textarea>
+          <textarea  rows="4" 
+          name="decription"
+          placeholder="Description"></textarea>
             
-            <button type="submit" class="btn">Add Category</button>
+            <button type="submit" 
+            name="submit"
+            class="btn">Add Category</button>
             
         </form>
     </div>

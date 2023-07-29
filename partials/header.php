@@ -1,5 +1,11 @@
 <?php
-require 'config/constants.php';
+require 'config/database.php';
+
+//fetch current user from database
+
+if(!isset($_SESSION['user-id'])) {
+    header('location: ' . ROOT_URL . 'signin.php');
+}
 ?>
 
 <!DOCTYPE html>
@@ -33,7 +39,7 @@ require 'config/constants.php';
           
                <?php if(isset($_SESSION['user-id'])) : ?>
                 <li class="nav__profile">
-                    <div class="avatar"><img src="./images/profile1.jpg"></div>
+                    <div class="avatar"><img src="<?= ROOT_URL . 'images/' . $avatar['avatar'] ?>"></div>
                     <ul>
                         <li><a href="<?= ROOT_URL ?>admin/index.php">Dashboard</a></li>
                         <li><a href="<?= ROOT_URL ?>logout.php">log Out</a></li>

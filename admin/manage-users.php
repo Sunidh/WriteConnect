@@ -1,8 +1,59 @@
 <?php
 include 'partials/header.php';
+
+//fetch users from database but  ot current user
+$current_admin_id=$_SESSION['user-id'];
+$query = "SELECT * FROM users WHERE NOT id=$current_admin_id";
+$users = mysqli_query($connection, $query);
 ?>
 
 <section class="dashboard">
+<?php if(isset($_SESSION['add-user-success'])) : //shows if add user was successful?>
+        <div class="alert__message success container">
+            <p>
+               <?= $_SESSION['add-user-success'];
+               unset($_SESSION['add-user-success'])
+               ?>
+            </p>
+        </div>
+        <?php elseif(isset($_SESSION['edit-user-success'])) : //shows if edit user was successful
+            ?>
+        <div class="alert__message success container">
+            <p>
+               <?= $_SESSION['edit-user-success'];
+               unset($_SESSION['edit-user-success']);
+               ?>
+            </p>
+        </div>
+        <?php elseif(isset($_SESSION['edit-user'])) : //shows if add user was not successful
+            ?>
+        <div class="alert__message error container">
+            <p>
+               <?= $_SESSION['edit-user'];
+               unset($_SESSION['edit-user']);
+               ?>
+            </p>
+        </div>
+        <?php elseif(isset($_SESSION['delete-user-success'])) : //shows if delet user was successful
+            ?>
+        <div class="alert__message success container">
+            <p>
+               <?= $_SESSION['delete-user-success'];
+               unset($_SESSION['delete-user-success']);
+               ?>
+            </p>
+        </div>
+        <?php elseif(isset($_SESSION['delete-user'])) : //shows if delete user was not successful
+            ?>
+        <div class="alert__message error container">
+            <p>
+               <?= $_SESSION['delete-user'];
+               unset($_SESSION['delete-user']);
+               ?>
+            </p>
+        </div>
+
+        <?php endif ?>
     <div class="container dashboard__container">
         <button id="show__sidebar-btn" class="sidebar__toggle">
             <i class="uil uil-angle-right-b"></i>
@@ -10,6 +61,7 @@ include 'partials/header.php';
         <button id="hide__sidebar-btn" class="sidebar__toggle">
             <i class="uil uil-angle-left-b"></i>
         </button>
+        
         <aside>
         <ul>
             <li><a href="add-post.php"><i class="uil uil-pen"></i>
@@ -50,35 +102,16 @@ include 'partials/header.php';
             </tr>
         </thead>
         <tbody>
+            <?php while($user = mysqli_fetch_assoc($users)) : ?>
             <tr>
-                <td>Riya Byahut</td>
-                <td>riyab2i5</td>
-                <td><a href="edit-category.php" class="btn sm">Edit</a></td>
-                <td><a href="delete-category.php" class="btn sm danger">Delete</a></td>
-                <td>Yes</td>
+                <td><?= "{$user['firstname']} {$user['lastname']}" ?></td>
+                <td><?= $user['username'] ?></td>
+                <td><a href="<?= ROOT_URL ?>admin/edit-user.php?id=<?= $user['id'] ?>" class="btn sm">Edit</a></td>
+                <td><a href="<?= ROOT_URL ?>admin/delete-user.php?id=<?= $user['id'] ?>" class="btn sm danger">Delete</a></td>
+                <td><?= $user['is_admin'] ? 'Yes' : 'No' ?></td>
             </tr>
-            <tr>
-                <td>Sunidhi </td>
-                <td>Sunidhi2k55</td>
-                <td><a href="edit-category.php" class="btn sm">Edit</a></td>
-                <td><a href="delete-category.php" class="btn sm danger">Delete</a></td>
-                <td>Yes</td>
-            </tr>
-            <tr>
-                <td>Arvi Malhotra</td>
-                <td>arvi2im</td>
-                <td><a href="edit-category.php" class="btn sm">Edit</a></td>
-                <td><a href="delete-category.php" class="btn sm danger">Delete</a></td>
-                <td>No</td>
-            </tr>
-            <tr>
-                <td>Reyansh Sengupta</td>
-                <td>Reyu33s</td>
-                <td><a href="edit-category.php" class="btn sm">Edit</a></td>
-                <td><a href="delete-category.php" class="btn sm  danger">Delete</a></td>
-                <td>No</td>
-            </tr>
-            
+        
+            <?php endwhile ?>
         </tbody>
     </table>
 </main>
